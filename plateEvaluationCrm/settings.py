@@ -39,21 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'evaluation',
 ]
 
-ASGI_APPLICATION = 'plateEvaluationCrm.routing.application'
 
-# Configuration de la couche de canal
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
