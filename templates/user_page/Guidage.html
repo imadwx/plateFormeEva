@@ -1,0 +1,280 @@
+
+
+
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+    data-assets-path="{% static 'assets/' %}" data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>LearnC | Dashboard</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/logo/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets/js/config.js' %}"></script>
+</head>
+
+<body>
+
+
+    <style>
+        .download-button {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none bg-white sticky-top">
+        <div class="row align-items-center">
+            <div class="col-6 ps-3 pt-2">
+                <a href="" class="nav-item nav-link app-brand-link my-2 ms-2">
+                    <img src="{% static 'assets/img/logo/LearnC.png' %}"
+                        style="max-width: 50%; max-height: 50%; object-fit: contain;">
+                </a>
+            </div>
+            <div class="col-6 text-end">
+                <a class="nav-item nav-link px-0" href="javascript:void(0)">
+                    <i class="bx bx-menu bx-sm" height="50px" width="50px"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar layout-without-navbar">
+
+        <!-- Layout container -->
+        <div class="layout-container">
+
+            <!-- Menu -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="" class="app-brand-link">
+                        <img src="{% static 'assets/img/logo/LearnC.png' %}" alt="" class="p-5"
+                            style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1 mt-3">
+                    <!-- Dashboard -->
+                    <li class="menu-item">
+                        <a href="" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+
+
+                    <!-- Components -->
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Sections</span></li>
+                    <!-- Sections -->
+
+                    <li class="menu-item active">
+                        <a href="{% url 'guidage_page' %}" class="menu-link">
+                            <div data-i18n="Basic">Guidage</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{% url 'evaluation_page' %}" class="menu-link">
+                            <div data-i18n="Analytics">Evaluation</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{% url 'evaluation_discussion' %}" class="menu-link">
+                            <div data-i18n="Analytics">Discussion</div>
+                        </a>
+                    </li>
+                 
+                    
+                    <!-- User interface -->
+
+                </ul>
+                <div class="menu-divider mb-0"></div>
+                <ul class="m-0 p-0">
+                    <li class="menu-block my-1 d-flex flex-row justify-content-end">
+                        {% if user.is_authenticated %}
+                        <div class="row w-100 me-1">
+                            <div class="col-10">
+                                <p><strong>{{ user.username }}</strong> is connected</p>
+                            </div>
+                            <div class="col-2">
+                                <div class="dropdown">
+                                    <a class="fold-show" title="Menu" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span aria-hidden="true" class="text-body bx bx-crown"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'logout_view' %}"><span class="bx bx-log-out me-2"></span>Logout</a></li>
+                                        <li><a class="dropdown-item" href="#" id="modifyProfileTrigger"><span class="bx bx-edit me-2"></span>Modify Profile</a></li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <a class="fold-show me-3" title="Signup" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-user-plus"></span>
+                        </a>
+                        <a class="fold-show" title="Login" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-log-in"></span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </aside>
+            <!--/ Menu -->
+
+            <!-- Layout page -->
+            <div class="layout-page">
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-style1">
+                                <li class="breadcrumb-item active">
+                                    <a>Guidage Evaluations</a>
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <div class="text-end ">
+                            <p class="demo-inline-spacing">
+                                <a class="btn btn-primary" href="">Add a section</a>
+                            </p>
+                        </div>
+
+                              <!-- Paragraphe descriptif -->
+                       <div style="width: 100%; padding: 10px;">
+                         <p>Notre plateforme <strong style="color: #007bff;">learnEva</strong> propose un guide complet sur l'élaboration des évaluations pédagogiques, réalisé par un groupe d'enseignants et de professeurs. Il se concentre principalement sur la notion d'objectifs pédagogiques et leur classification. Le guide commence par définir de manière générale ce qu'est un objectif pédagogique, en expliquant qu'il s'agit d'une communication d'intention décrivant ce qui est attendu de l'élève. Il présente ensuite les différents types d'objectifs, tels que les objectifs cognitifs, psychomoteurs et affectifs, selon les taxonomies de Bloom et de Gagné. Une partie substantielle est consacrée à la définition des objectifs pédagogiques spécifiques, qui doivent être observables, mesurables et correspondre à des critères bien définis. Enfin, le document aborde la notion de congruence entre les objectifs fixés et les items d'évaluation conçus pour les mesurer. Dans l'ensemble, ce guide semble être un outil très complet et détaillé pour aider les enseignants dans l'élaboration d'évaluations pédagogiques efficaces et alignées sur les objectifs d'apprentissage visés.</p>
+                         <p>Pour plus d'informations, vous pouvez télécharger ce guide :</p>
+                         <button id="downloadPdfButton" class="download-button" data-filepath="/media/guide_evaluation.pdf">Télécharger ce guide</button>
+                       </div>
+
+
+                       
+                        
+                    </div>
+                    <!--/ Content -->
+
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme text-center">
+                        Created by Anas Baddy for LearnC
+                    </footer>
+                    <!--/ Footer -->
+
+                    <!-- Content area backdrop -->
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!--/ Content wrapper -->
+
+            </div>
+            <!--/ Layout page -->
+
+        </div>
+        <!--/ Layout container -->
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+    </div>
+    <!--/ Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <!-- Page JS -->
+    <script src="{% static 'assets/js/dashboards-analytics.js' %}"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadPdfButton = document.querySelector('#downloadPdfButton');
+    
+            // Function to handle PDF download
+            function handleDownload(event) {
+                event.preventDefault();
+                const pdfUrl = this.getAttribute('data-filepath'); // Get PDF URL from data-filepath attribute
+                const fileName = pdfUrl.substring(pdfUrl.lastIndexOf('/') + 1); // Extract file name
+                const a = document.createElement('a'); // Create a temporary <a> element
+                a.href = pdfUrl; // Set href attribute to PDF URL
+                a.download = fileName; // Set download attribute to file name
+                document.body.appendChild(a); // Append <a> element to the document body
+                a.click(); // Simulate click on the <a> element
+                document.body.removeChild(a); // Remove <a> element from the document body
+            }
+    
+            // Add click event listener to button
+            downloadPdfButton.addEventListener('click', handleDownload);
+        });
+    </script>
+</body>
+
+</html>

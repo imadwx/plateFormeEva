@@ -1,0 +1,1286 @@
+
+
+
+
+
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+    data-assets-path="{% static 'assets/' %}" data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>LearnC | Dashboard</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/logo/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets/js/config.js' %}"></script>
+</head>
+
+<body>
+
+<style>
+
+    #cardsContainer {
+       display: flex; /* Masquer par défaut */
+    }
+
+    .card {
+       border: 1px solid #ccc;
+       border-radius: 8px;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+       background-color: #fff;
+       padding: 20px;
+       text-align: center;
+    }
+
+    /* Modal styles */
+    .modalUser {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+        z-index: 2000; /* Z-index pour s'assurer que le modal est au-dessus du contenu */
+        display: none;
+    }
+
+    .modalUser-content {
+        background-color: white;
+        padding: 20px;
+        width: 550px;
+        height: 100vh;
+        max-height: 100%;
+        overflow-y: auto; 
+        margin-left: 60%;
+        position: relative;
+    }
+
+
+
+    .modalUser-header {
+         display: flex;
+         align-items: center;
+    }
+
+    .close {
+        position: absolute;
+        top: 5px; /* À 10px du haut du modal-content */
+        right: 20px; /* À 10px de la droite du modal-content */
+        cursor: pointer;
+        font-size: 24px;
+    }
+
+    .moduleUser-container {
+      margin-top: 20px;
+    }
+     
+    .evaluationUser-cards {
+        max-width: 100%; /* Largeur maximale des cartes d'évaluation */
+        overflow-x: auto; /* Activation du défilement horizontal si nécessaire */
+        display: flex;
+        gap: 10px; /* Espacement entre les cartes */
+    }
+
+    .evaluationUser-card {
+       flex: 0 0 auto; /* Empêche le redimensionnement des cartes */
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       padding: 8px;
+       border: 1px solid #ccc;
+       border-radius: 5px;
+       width: 120px; /* Largeur fixe des cartes */
+       text-align: center; /* Centre le contenu horizontal */
+    }
+
+    .evaluationUser-card img {
+       margin-bottom: 5px; /* Espacement entre l'icône et le texte */
+    }
+
+
+
+  </style>
+    
+
+    {% include 'Modal_profile.html' %}
+    <!-- Modal pour les sous-options -->
+    <div class="modal fade" id="subOptionsModal" tabindex="-1" aria-labelledby="subOptionsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subOptionsModalLabel">Sous-options</h5>
+                <button type="button" id="btn-close" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+                <div id="error-message" class="alert alert-danger d-none" role="alert">
+                    Veuillez sélectionner une option de type.
+                </div>
+            </div>
+            <div class="modal-body">
+                <form id="modalSearchForm"  action="{% url 'modal_search_view' %}" method="POST">
+                    {% csrf_token %}
+                  <div id="subOptionsContent">
+                    <!-- Contenu des sous-options sera inséré ici -->
+                  </div>
+                  <div class="d-flex justify-content-end mt-3">
+                    <button type="button" id="modalSearchButton" class="btn btn-primary">Chercher</button>
+                </div>
+                </form>
+              </div>
+          </div>
+        </div>
+    </div>
+
+    <div id="evaluationModalUser" class="modalUser">
+        <div class="modalUser-content">
+            <span class="close">&times;</span>
+            <div class="modalUser-header">
+                {% if profile_user%}
+                    <img src="{{ profile_user.profile_image.url }}" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;margin-right: 10px;" alt="Profile Image">
+                {% else %}
+                    <img src="/media/user_png.png" style="border-radius: 50%; width: 100px; height: 100px; object-fit: cover;margin-right: 10px;" alt="Default Profile Image">
+                {% endif %}
+                <div>
+                    <h4>{{ user.username }}</h4>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+            
+            <!-- Generalites Section -->
+            <div class="moduleUser-container">
+                <h4>Généralités sur les systèmes informatique</h4>
+                <div class="evaluationUser-cards">
+                    {% if evaluations_generalites %}
+                        {% for evaluation in evaluations_generalites %}
+                            <div class="evaluationUser-card">
+                                <img src="/media/pdf_icon.jpg" alt="PDF Icon" style="width: 50px; height: 50px;">
+                                <a href="{{ evaluation.uploaded_files.url }}" download>Download</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-evaluation">Pas encore d'évaluation de généralités</p>
+                    {% endif %}
+                </div>
+            </div>
+    
+            <!-- Logiciels Section -->
+            <div class="moduleUser-container">
+                <h4>Logiciels</h4>
+                <div class="evaluationUser-cards">
+                    {% if evaluations_logiciels %}
+                        {% for evaluation in evaluations_logiciels %}
+                            <div class="evaluationUser-card">
+                                <img src="/media/pdf_icon.jpg" alt="PDF Icon" style="width: 50px; height: 50px;">
+                                <a href="{{ evaluation.uploaded_files.url }}" download>Download</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-evaluation">Pas encore d'évaluation de logiciels</p>
+                    {% endif %}
+                </div>
+            </div>
+    
+            <!-- Algorithmique Section -->
+            <div class="moduleUser-container">
+                <h4>Algorithmique et Programmation</h4>
+                <div class="evaluationUser-cards">
+                    {% if evaluations_algorithmique %}
+                        {% for evaluation in evaluations_algorithmique %}
+                            <div class="evaluationUser-card">
+                                <img src="/media/pdf_icon.jpg" alt="PDF Icon" style="width: 50px; height: 50px;">
+                                <a href="{{ evaluation.uploaded_files.url }}" download>Download</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-evaluation">Pas encore d'évaluation d'algorithmique</p>
+                    {% endif %}
+                </div>
+            </div>
+    
+            <!-- Reseaux Section -->
+            <div class="moduleUser-container">
+                <h4>Réeseaux et Internet</h4>
+                <div class="evaluationUser-cards">
+                    {% if evaluations_reseaux %}
+                        {% for evaluation in evaluations_reseaux %}
+                            <div class="evaluationUser-card">
+                                <img src="/media/pdf_icon.jpg" alt="PDF Icon" style="width: 50px; height: 50px;">
+                                <a href="{{ evaluation.uploaded_files.url }}" download>Download</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-evaluation">Pas encore d'évaluation de réseaux</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+    <div id="successMessage" style="display: none; position: absolute; top: 20px; left: 20px; background-color: green; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+        Évaluation chargée avec succès.
+    </div>
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none bg-white sticky-top">
+        <div class="row align-items-center">
+            <div class="col-6 ps-3 pt-2">
+                <a href="" class="nav-item nav-link app-brand-link my-2 ms-2">
+                    <img src="{% static 'assets/img/logo/LearnC.png' %}"
+                        style="max-width: 50%; max-height: 50%; object-fit: contain;">
+                </a>
+            </div>
+            <div class="col-6 text-end">
+                <a class="nav-item nav-link px-0" href="javascript:void(0)">
+                    <i class="bx bx-menu bx-sm" height="50px" width="50px"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar layout-without-navbar">
+
+        <!-- Layout container -->
+        <div class="layout-container">
+
+            <!-- Menu -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="" class="app-brand-link">
+                        <img src="{% static 'assets/img/logo/LearnC.png' %}" alt="" class="p-5"
+                            style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1 mt-3">
+                    <!-- Dashboard -->
+                    <li class="menu-item">
+                        <a href="" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+
+
+                    <!-- Components -->
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Sections</span></li>
+                    <!-- Sections -->
+
+                    <li class="menu-item ">
+                        <a href="{% url 'guidage_page' %}" class="menu-link">
+                            <div data-i18n="Basic">Guidage</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item active">
+                        <a href="{% url 'evaluation_page' %}" class="menu-link">
+                            <div data-i18n="Analytics">Evaluation</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{% url 'evaluation_discussion' %}" class="menu-link">
+                            <div data-i18n="Analytics">Discussion</div>
+                        </a>
+                    </li>
+                 
+                    
+                    <!-- User interface -->
+
+                </ul>
+                <div class="menu-divider mb-0"></div>
+                <ul class="m-0 p-0">
+                    <li class="menu-block my-1 d-flex flex-row justify-content-end">
+                        {% if user.is_authenticated %}
+                        <div class="row w-100 me-1">
+                            <div class="col-10">
+                                <p><strong id="usernameTrigger" style="cursor: pointer;">{{ user.username }}</strong> is connected</p>
+                            </div>
+                            <div class="col-2">
+                                <div class="dropdown">
+                                    <a class="fold-show" title="Menu" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span aria-hidden="true" class="text-body bx bx-crown"></span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'logout_view' %}"><span class="bx bx-log-out me-2"></span>Logout</a></li>
+                                        <li><a class="dropdown-item" href="#" id="modifyProfileTrigger"><span class="bx bx-edit me-2"></span>Modify Profile</a></li>
+                                    </ul>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% else %}
+                        <a class="fold-show me-3" title="Signup" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-user-plus"></span>
+                        </a>
+                        <a class="fold-show" title="Login" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-log-in"></span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </aside>
+            <!--/ Menu -->
+
+           <!-- Layout page -->
+       <div class="layout-page">
+
+    <!-- Content wrapper -->
+    <div class="content-wrapper" style="position: relative;">
+
+        <div style="cursor: pointer;background-color: #007bff; padding: 10px; margin: 20px;position: fixed; bottom: 2px; right: 10px;">
+            <span style="color: white;" id="openModalButton">Ajouter une évaluation</span>
+            <i class="fas fa-plus-circle" style="color: white; font-size: 20px; margin-left: 10px;"></i>
+        </div>
+
+
+        <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1">
+                    <li class="breadcrumb-item active">
+                        <a href="#">Evaluation</a>
+                    </li>
+                </ol>
+            </nav>
+            
+            <form id="searchForm"  method="POST">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="selectOption1">Module</label>
+                        <select class="form-control" id="selectOption1">
+                            <option value="generalites">Généralités sur les systèmes informatiques</option>
+                            <option value="logiciels">Logiciels</option>
+                            <option value="algorithmique">Algorithmique et Programmation</option>
+                            <option value="reseaux">Réseaux et Internet</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="selectOption2">Type d'item</label>
+                        <select class="form-control" id="selectOption2">
+                            <option value="Reponse_construit">items à réponse construit</option>
+                            <option value="Reponse_choix">items à Réponse choix</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" id="searchButton">Chercher</button>
+                </div>
+            </div>
+            
+            </form>
+
+            <div id="cardsContainer" style="display: none; width: 100%; padding: 10px; margin-top: 50px;">
+                <div class="d-flex align-items-center" style="max-width: 100%; overflow-x: auto;">
+     
+                </div>
+             </div>
+
+            <!-- Modal pour ajouter une évaluation -->
+          <div class="modal fade" id="evaluationModal" tabindex="-1" aria-labelledby="evaluationModalLabel" aria-hidden="true">
+               <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                       <div class="modal-header">
+                         <h5 class="modal-title" id="evaluationModalLabel">Ajouter une évaluation</h5>
+                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                       </div>
+                       <div class="modal-body" id="evaluationModalBody">
+
+                        <form id="evaluationForm" method="post">
+                            {% csrf_token %}
+                            <div id="step1">
+                                <div id="numQuestionsError" class="alert alert-danger mt-2" style="display: none;">
+                                    Veuillez entrer un nombre valide de questions.
+                                </div>
+                                <div class="form-group">
+                                    <label for="numQuestions">Nombre de questions :</label>
+                                    <input type="number" class="form-control" id="numQuestions" name="numQuestions" min="1">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="questionType">Type de question :</label>
+                                    <select class="form-control" id="evaluationType">
+                                        <option value="generalites">Généralités sur les systèmes informatiques</option>
+                                        <option value="logiciels">Logiciels</option>
+                                        <option value="algorithmique">Algorithmique et Programmation</option>
+                                        <option value="reseaux">Réseaux et Internet</option>
+                                    </select>
+                                </div>
+
+                                <div class="text-center my-3">
+                                    <span>ou</span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="pdfUpload">Télécharger un fichier PDF :</label>
+                                    <input type="file" class="form-control" id="pdfUpload" name="pdfUpload">
+                                </div>
+
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <label>Type d'évaluation :</label>
+                                    <div class="d-flex justify-content-center">
+                                       <div class="form-check me-3">
+                                          <input class="form-check-input" type="radio" name="questionTypeAjout" id="singleChoice" value="single">
+                                          <label class="form-check-label" for="singleChoice">Choix simple</label>
+                                       </div>
+                                       <div class="form-check me-3">
+                                          <input class="form-check-input" type="radio" name="questionTypeAjout" id="multipleChoice" value="multiple">
+                                          <label class="form-check-label" for="multipleChoice">Choix multiple</label>
+                                       </div>
+                                       <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="questionTypeAjout" id="constructedResponse" value="constructed">
+                                          <label class="form-check-label" for="constructedResponse">Réponse construite</label>
+                                       </div>
+                                </div>
+
+                                <button type="button" class="btn btn-primary mt-3" id="nextButton">Suivant</button>
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="submitButtonWithPDF" style="position: absolute; bottom: 20px; right: 5px;">soumettre</button>
+                        </form>
+                      </div>
+                  </div>
+            </div>
+       </div>
+
+
+
+       
+            
+            <!--/ Content -->
+
+            <!--/ Footer -->
+
+            <!-- Content area backdrop -->
+             <div class="content-backdrop fade"></div>
+        </div>
+         <!--/ Content wrapper -->
+
+      </div>
+    <!--/ Layout page -->
+
+        <!--/ Layout container -->
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+    </div>
+
+    
+    <!--/ Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <!-- Page JS -->
+    <script src="{% static 'assets/js/dashboards-analytics.js' %}"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
+
+   
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const selectOption2 = document.getElementById('selectOption2');
+    const subOptionsModalElement = document.getElementById('subOptionsModal');
+    const subOptionsModal = new bootstrap.Modal(subOptionsModalElement);
+
+    // Fonction pour mettre à jour le contenu du modal en fonction de la sélection
+    function updateModal(selectedValue) {
+        let subOptionsContent = '';
+
+        switch (selectedValue) {
+            case 'Reponse_choix':
+                subOptionsContent = `
+                   <p>Sous-options pour Items à Réponse choix  </p>
+                   <div>
+                            <input type="radio" id="choix_simple" name="choix_type" value="single">
+                            <label for="choix_simple">À choix simple</label><br>
+                            <input type="radio" id="choix_multiple" name="choix_type" value="multiple">
+                            <label for="choix_multiple">À choix multiple</label><br>
+                   </div>
+                `;
+                subOptionsModal.show(); // Afficher le modal pour Reponse_choix
+                break;
+            case 'Reponse_construit':
+                // Ne rien faire pour Reponse_construit
+                break;
+            default:
+                subOptionsContent = '<p>Aucune sous-option disponible pour cette option.</p>';
+        }
+
+        document.getElementById('subOptionsContent').innerHTML = subOptionsContent;
+    }
+
+    // Écoute le changement dans le select pour mettre à jour le modal
+    selectOption2.addEventListener('change', function() {
+        const selectedValue = selectOption2.value;
+        updateModal(selectedValue);
+    });
+
+    // Écoute le clic sur le bouton de fermeture du modal
+    const btnClose = document.getElementById('btn-close');
+    console.log(btnClose);
+    if (btnClose) {
+        btnClose.addEventListener('click', function() {
+            console.log('imad');
+            selectOption2.value = 'Reponse_construit'; // Remettre la valeur à Reponse_construit
+            const selectOption2Label = document.querySelector('#selectOption2 option[value="Reponse_construit"]');
+            if (selectOption2Label) {
+                selectOption2Label.selected = true;
+            }
+        });
+    }
+
+    searchButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
+
+        const selectOption1 = document.getElementById('selectOption1').value;
+        const selectOption2 = document.getElementById('selectOption2').value;
+        
+
+        const formData = new FormData();
+        formData.append('module', selectOption1);
+        formData.append('type_item', selectOption2);
+
+        fetch('/evalution_search_construit/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken') // Assurez-vous que la fonction getCookie est définie pour obtenir le token CSRF
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+                // Supprimer les anciennes cartes
+               
+                cardsContainer.innerHTML = '';
+               
+                if (data.evaluations_urls.length === 0) {
+                    const noEvaluationMessage = document.createElement('div');
+                    noEvaluationMessage.textContent = `Aucune évaluation disponible pour le module "${data.module}" de type "${data.type_item}".`;
+                    noEvaluationMessage.style.display = 'flex';
+                    noEvaluationMessage.style.justifyContent = 'center';
+                    noEvaluationMessage.style.alignItems = 'center';
+                    noEvaluationMessage.style.height = '100%';
+                    noEvaluationMessage.style.width = '100%';
+                    cardsContainer.appendChild(noEvaluationMessage);
+               } else {
+              // Créer les nouvelles cartes avec les URLs des fichiers PDF
+               data.evaluations_urls.forEach(url => {
+                  const card = document.createElement('div');
+                  card.classList.add('card', 'm-2');
+                  card.style.width = '150px';
+                  card.style.height = '200px';
+                  card.style.flex = '0 0 auto';
+                  card.style.display = 'flex';
+                  card.style.flexDirection = 'column';
+                  card.style.alignItems = 'center';
+                  card.style.justifyContent = 'center';
+
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.target = '_blank'; // Pour ouvrir le lien dans un nouvel onglet/tab
+                  link.style.textDecoration = 'none'; // Supprime le soulignement du lien
+
+                  const icon = document.createElement('i');
+                  icon.classList.add('fas', 'fa-file-pdf', 'text-danger');
+                  icon.style.fontSize = '50px';
+                  icon.style.marginBottom = '25px';
+
+                  const title = document.createElement('h5');
+                  title.classList.add('card-title');
+                  title.style.fontSize = '15px';
+                  title.textContent = 'Document PDF';
+
+                  link.appendChild(icon);
+                  link.appendChild(title);
+                  card.appendChild(link);
+
+                  cardsContainer.appendChild(card);
+                  cardsContainer.style.display = 'flex';
+           });
+        }
+    // Afficher le container de cartes
+          cardsContainer.style.display = 'flex';
+          subOptionsModal.hide();
+          selectOption2.value = 'Reponse_construit'; 
+        
+ 
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+
+    const modalSearchButton = document.getElementById('modalSearchButton');
+    const modalSearchForm = document.getElementById('modalSearchForm');
+    const errorMessage = document.getElementById('error-message');
+
+
+    modalSearchButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Empêcher l'envoi du formulaire par défaut
+
+        const selectOption1 = document.getElementById('selectOption1').value;
+        const selectedRadio = document.querySelector('input[name="choix_type"]:checked');
+        const cardsContainer = document.getElementById('cardsContainer');
+        console.log(cardsContainer);
+        if (!selectedRadio) {
+            // Afficher le message d'erreur
+            errorMessage.classList.remove('d-none');
+            errorMessage.classList.add('d-block');
+        } else {
+            // Masquer le message d'erreur
+            errorMessage.classList.remove('d-block');
+            errorMessage.classList.add('d-none');
+
+            const radioValue = selectedRadio.value;
+
+            const formData = new FormData();
+            formData.append('module', selectOption1);
+            formData.append('type_item', radioValue);
+
+            fetch(modalSearchForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken') // Assurez-vous que la fonction getCookie est définie pour obtenir le token CSRF
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                // Supprimer les anciennes cartes
+               
+                cardsContainer.innerHTML = '';
+               
+                if (data.evaluations_urls.length === 0) {
+                  // Aucune évaluation trouvée
+                   const noEvaluationMessage = document.createElement('div');
+                   noEvaluationMessage.textContent = `Aucune évaluation disponible pour le module "${data.module}" de type "${data.type_item}".`;
+                   cardsContainer.appendChild(noEvaluationMessage);
+               } else {
+              // Créer les nouvelles cartes avec les URLs des fichiers PDF
+               data.evaluations_urls.forEach(url => {
+                  const card = document.createElement('div');
+                  card.classList.add('card', 'm-2');
+                  card.style.width = '150px';
+                  card.style.height = '200px';
+                  card.style.flex = '0 0 auto';
+                  card.style.display = 'flex';
+                  card.style.flexDirection = 'column';
+                  card.style.alignItems = 'center';
+                  card.style.justifyContent = 'center';
+
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.target = '_blank'; // Pour ouvrir le lien dans un nouvel onglet/tab
+                  link.style.textDecoration = 'none'; // Supprime le soulignement du lien
+
+                  const icon = document.createElement('i');
+                  icon.classList.add('fas', 'fa-file-pdf', 'text-danger');
+                  icon.style.fontSize = '50px';
+                  icon.style.marginBottom = '25px';
+
+                  const title = document.createElement('h5');
+                  title.classList.add('card-title');
+                  title.style.fontSize = '15px';
+                  title.textContent = 'Document PDF';
+
+                  link.appendChild(icon);
+                  link.appendChild(title);
+                  card.appendChild(link);
+
+                  cardsContainer.appendChild(card);
+                  cardsContainer.style.display = 'flex';
+           });
+        }
+        // Afficher le container de cartes
+             cardsContainer.style.display = 'flex';
+             subOptionsModal.hide();
+             selectOption2.value = 'Reponse_construit'; 
+        
+ 
+        })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+         }
+       });
+
+
+       document.getElementById('openModalButton').addEventListener('click', function () {
+             // Ouvre le modal lorsque le bouton "Ajouter une évaluation" est cliqué
+            new bootstrap.Modal(document.getElementById('evaluationModal')).show();
+       });
+
+     let currentQuestion = 0;
+     let totalQuestions = 0;
+     let evaluationData = [];
+     let evaluationType='generalites'
+
+    
+
+     document.getElementById('nextButton').addEventListener('click', function () {
+            const numQuestions = document.getElementById('numQuestions').value;
+            const selectedType = document.getElementById('evaluationType').value;
+
+            if (numQuestions.trim() === '') {
+                 // Afficher le message d'erreur
+                 document.getElementById('numQuestionsError').style.display = 'block';
+            } else if (parseInt(numQuestions) > 0) {
+                 // Cacher le message d'erreur s'il était affiché précédemment
+                document.getElementById('numQuestionsError').style.display = 'none';
+
+                // Mettre à jour les variables et procéder à l'étape suivante
+                totalQuestions = parseInt(numQuestions);
+                currentQuestion = 1;
+                evaluationData = [];
+                evaluationType = selectedType; 
+                showEvaluationStep();
+            } else {
+                // Gérer le cas où numQuestions est négatif ou zéro (peut-être pas nécessaire ici)
+                document.getElementById('numQuestionsError').style.display = 'none';
+                console.error('Le nombre de questions doit être supérieur à zéro.');
+            }
+        });
+
+
+     function showEvaluationStep() {
+            const modalBody = document.getElementById('evaluationModalBody');
+            modalBody.innerHTML = `
+            <div id="questionStep">
+                 <h5>Question ${currentQuestion} sur ${totalQuestions}</h5>
+                 <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
+                 <div class="form-group">
+                    <label>Type d'évaluation :</label>
+                    <div class="d-flex justify-content-center">
+                       <div class="form-check me-3">
+                          <input class="form-check-input" type="radio" name="evaluationType" id="singleChoice" value="single">
+                          <label class="form-check-label" for="singleChoice">Choix simple</label>
+                       </div>
+                       <div class="form-check me-3">
+                          <input class="form-check-input" type="radio" name="evaluationType" id="multipleChoice" value="multiple">
+                          <label class="form-check-label" for="multipleChoice">Choix multiple</label>
+                       </div>
+                       <div class="form-check">
+                          <input class="form-check-input" type="radio" name="evaluationType" id="constructedResponse" value="constructed">
+                          <label class="form-check-label" for="constructedResponse">Réponse construite</label>
+                       </div>
+                   </div>
+                  <button type="button" class="btn btn-primary mt-3" id="nextQuestionButton">Suivant</button>
+               </div>
+           </div>
+       `;
+
+       document.getElementById('nextQuestionButton').addEventListener('click', function () {
+              const selectedType = document.querySelector('input[name="evaluationType"]:checked');
+              const errorDiv = document.getElementById('errorMessages');
+    
+              if (!selectedType) {
+                displayErrorMessage('Veuillez sélectionner un type d\'évaluation.');
+                return; // Arrête la fonction ici s'il n'y a pas de type sélectionné
+              }
+
+              errorDiv.style.display = 'none'; // Masquer les messages d'erreur s'il y en a eu précédemment
+
+              // Ajouter les données d'évaluation avec le type sélectionné à evaluationData
+               evaluationData.push({ questionNumber: currentQuestion,evaluationType:evaluationType, type: selectedType.value, question: '', answers: [] });
+
+                // Afficher l'entrée de la question suivante ou effectuer d'autres actions nécessaires
+              showQuestionInput();
+           });
+      }
+
+      document.getElementById('submitButtonWithPDF').addEventListener('click', function () {
+             const selectedType = document.getElementById('evaluationType').value;
+             const pdfUpload = document.getElementById('pdfUpload').files[0];
+
+             var selectedQuestionType = document.querySelector('input[name="questionTypeAjout"]:checked');
+
+             // Validation simple des entrées
+             if (selectedType.trim() === '' || !pdfUpload) {
+                 document.getElementById('numQuestionsError').textContent = "Veuillez chargé le fichier pdf d'évaluation ";
+                 document.getElementById('numQuestionsError').style.display = 'block';
+                 return;
+             } else {
+                 document.getElementById('numQuestionsError').style.display = 'none';
+             }
+
+             // Préparer les données du formulaire
+             const formData = new FormData();
+             formData.append('evaluationType', selectedType);
+             if (pdfUpload) {
+               formData.append('pdfUpload', pdfUpload);
+             }
+
+             if (selectedQuestionType) {
+                formData.append('questionType', selectedQuestionType.value);
+             }
+
+
+             // Envoyer les données au backend
+             fetch('/submit-evaluation-with-pdf/', {
+                   method: 'POST',
+                   headers: {
+                   'X-CSRFToken': getCookie('csrftoken')
+             },
+                   body: formData
+             })
+             .then(response => response.json())
+             .then(data => {
+                console.log(data);
+                if (data.success) {
+                      // Afficher le message de succès
+                     const successMessage = document.getElementById('successMessage');
+                     successMessage.style.display = 'block';
+
+                      // Masquer le message après 8 secondes
+                     setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        // Fermer le modal
+                        const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+                        evaluationModal.hide();
+                        location.reload();
+                     }, 10000);
+
+                    
+                } else {
+                  console.log(data.error);
+               }
+
+             })
+            .catch(error => {
+                  console.error('Error:', error);
+                  console.log('Une erreur est survenue. Veuillez réessayer.');
+            });
+          });
+
+        
+
+      function showQuestionInput() {
+          const currentEvaluation = evaluationData[currentQuestion - 1];
+          const modalBody = document.getElementById('evaluationModalBody');
+
+          let additionalInputs = '';
+          if (currentEvaluation.type === 'multiple') {
+               additionalInputs = `
+               <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
+               <div id="answerInputs"></div>
+               <button type="button" class="btn btn-secondary mt-3" id="addAnswerButton">Ajouter réponse</button>
+               `;
+          }
+
+          modalBody.innerHTML = `
+            <div id="questionInputStep">
+                 <h5>Question ${currentQuestion}</h5>
+                  <div id="errorMessages" class="alert alert-danger" style="display: none;"></div>
+                 <div class="form-group">
+                    <label for="questionText">Question :</label>
+                    <input type="text" class="form-control" id="questionText">
+                 </div>
+                 ${additionalInputs}
+                 <button type="button" class="btn btn-primary mt-3" id="submitQuestionButton">Soumettre</button>
+            </div>
+        `;
+
+        if (currentEvaluation.type === 'multiple') {
+              document.getElementById('addAnswerButton').addEventListener('click', function () {
+              const answerInputs = document.getElementById('answerInputs');
+              const newAnswerInput = document.createElement('input');
+              newAnswerInput.type = 'text';
+              newAnswerInput.className = 'form-control mt-2';
+              newAnswerInput.placeholder = 'Réponse';
+              answerInputs.appendChild(newAnswerInput);
+           });
+        }
+        
+
+       
+
+
+        document.getElementById('submitQuestionButton').addEventListener('click', function () {
+           document.getElementById('errorMessages').style.display='none';
+           const questionText = document.getElementById('questionText').value.trim(); // Récupère le texte de la question en enlevant les espaces vides
+           if (questionText === '') {
+               displayErrorMessage('Veuillez entrer une question.');
+               return; // Arrête la fonction ici si la question est vide
+           }
+
+          currentEvaluation.question = questionText;
+
+          if (currentEvaluation.type === 'multiple') {
+                 // Vérifier les réponses pour les questions de type multiple
+               const answers = Array.from(document.getElementById('answerInputs').querySelectorAll('input'))
+                            .map(input => input.value.trim())
+                            .filter(answer => answer !== ''); // Filtrer les réponses vides
+
+              if (answers.length < 4) {
+                     // Afficher un message d'erreur pour les réponses
+                   displayErrorMessage('Veuillez entrer au moins quatre réponses pour les questions de type multiple.');
+                 return; // Arrête la fonction ici si les réponses sont insuffisantes
+               }
+
+             currentEvaluation.answers = answers;
+          }
+
+
+           // Si tout est valide, effacer les messages d'erreur et procéder à l'étape suivante ou à la soumission
+          hideErrorMessage();
+             if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showEvaluationStep();
+            } else {
+              // Soumission des données d'évaluation
+              //evaluationData.push(currentEvaluation); // Ajouter l'évaluation courante à la liste des données d'évaluation
+              console.log(evaluationData); // Pour le débogage, affichez les données d'évaluation dans la console
+              submitEvaluationData()
+             // Réinitialisation des valeurs ou autres actions après soumission
+            }
+         });
+
+       
+
+      }
+
+      function displayErrorMessage(message) {
+             const errorDiv = document.getElementById('errorMessages');
+             errorDiv.textContent = message;
+             errorDiv.style.display = 'block'; // Afficher le message d'erreur
+         }
+
+         function hideErrorMessage() {
+            const errorDiv = document.getElementById('errorMessages');
+            errorDiv.textContent = ''; // Effacer le contenu du message d'erreur
+            errorDiv.style.display = 'none'; // Cacher le message d'erreur
+         }
+       
+      console.log(evaluationData);
+      function submitEvaluationData() {
+        fetch('/submit-evaluation/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({ evaluationData })
+       })
+       .then(response => response.json())
+       .then(data => {
+         const downloadLink = document.createElement('a');
+         downloadLink.href = data.pdf_url;
+         downloadLink.textContent = 'Télécharger le fichier PDF';
+         downloadLink.setAttribute('download', 'evaluation.pdf');
+
+         const downloadStep = document.createElement('div');
+         downloadStep.appendChild(downloadLink);
+
+         const modalBody = document.getElementById('evaluationModalBody');
+         modalBody.innerHTML = '';
+         modalBody.appendChild(downloadStep);
+
+        // Add the close button
+        const closeModalButton = document.createElement('button');
+        closeModalButton.type = 'button';
+        closeModalButton.className = 'btn btn-secondary';
+        closeModalButton.textContent = 'Fermer';
+        closeModalButton.style.position = 'absolute';
+        closeModalButton.style.bottom = '10px';
+        closeModalButton.style.right = '10px';
+        closeModalButton.addEventListener('click', function () {
+        const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+        evaluationModal.hide();
+        location.reload();
+        //resetModal();
+      });
+
+          modalBody.appendChild(closeModalButton);
+      })
+      .catch(error => {
+          console.error('Error:', error);
+       });
+      }
+
+        // Ferme le modal
+       // const evaluationModal = bootstrap.Modal.getInstance(document.getElementById('evaluationModal'));
+      //  evaluationModal.hide();
+
+      function resetModal() {
+       // Réinitialiser les variables
+       currentQuestion = 0;
+       totalQuestions = 0;
+       evaluationData = [];
+       evaluationType = 'Generalite';
+
+        // Réinitialiser le contenu du modal à l'étape initiale
+        const modalBody = document.getElementById('evaluationModalBody');
+        modalBody.innerHTML = `
+         <form id="evaluationForm" method="post">
+                     {% csrf_token %}
+                      <div id="step1">
+                          <div id="numQuestionsError" class="alert alert-danger mt-2" style="display: none;">
+                                    Veuillez entrer un nombre valide de questions.
+                          </div>
+                          <div class="form-group">
+                                    <label for="numQuestions">Nombre de questions :</label>
+                                    <input type="number" class="form-control" id="numQuestions" name="numQuestions" min="1">
+                          </div>
+
+                          <div class="form-group">
+                                    <label for="questionType">Type de question :</label>
+                                    <select class="form-control" id="evaluationType">
+                                        <option value="generalites">Généralités sur les systèmes informatiques</option>
+                                        <option value="logiciels">Logiciels</option>
+                                        <option value="algorithmique">Algorithmique et Programmation</option>
+                                        <option value="reseaux">Réseaux et Internet</option>
+                                    </select>
+                           </div>
+
+                           <div class="text-center my-3">
+                                    <span>ou</span>
+                           </div>
+
+
+                           <div class="form-group">
+                                    <label for="pdfUpload">Télécharger un fichier PDF :</label>
+                                    <input type="file" class="form-control" id="pdfUpload" name="pdfUpload">
+                           </div>
+
+                                <button type="button" class="btn btn-primary mt-3" id="nextButton">Suivant</button>
+                           </div>
+                            <button type="button" class="btn btn-secondary" id="submitButtonWithPDF" style="position: absolute; bottom: 20px; right: 5px;">soumettre</button>
+                        </form>
+    `;
+    
+      }
+
+ 
+
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+      }
+
+
+         // Get the modal element
+         var modal = document.getElementById('evaluationModalUser');
+
+         // Get the <span> element that closes the modal
+         var closeBtn = document.getElementsByClassName('close')[0];
+
+         // When the user clicks on the username, open the modal
+         document.getElementById('usernameTrigger').addEventListener('click', function() {
+             modal.style.display = 'block';
+          // Here you can dynamically load content based on user's evaluations
+
+        });
+
+        // When the user clicks on <span> (x), close the modal
+        closeBtn.onclick = function() {
+             modal.style.display = 'none';
+        };
+
+
+        $(document).ready(function() {
+           // Lorsque l'utilisateur clique sur "Modify Profile"
+          $('#modifyProfileTrigger').click(function(e) {
+              e.preventDefault(); // Empêche le lien de suivre son URL par défaut
+
+           // Affiche le modal de modification de profil
+             $('#modifyProfileModal').modal('show');
+          });
+
+          // Lorsque l'utilisateur coche ou décoche la checkbox de modification du nom
+          $('#modifyNameCheckbox').change(function() {
+               if ($(this).is(':checked')) {
+                    $('#nameInput').removeClass('d-none'); // Affiche le champ d'entrée du nom
+               } else {
+                $('#nameInput').addClass('d-none'); // Cache le champ d'entrée du nom
+               }
+          });
+
+          // Lorsque l'utilisateur coche ou décoche la checkbox de modification de l'email
+          $('#modifyEmailCheckbox').change(function() {
+                 if ($(this).is(':checked')) {
+                    $('#emailInput').removeClass('d-none'); // Affiche le champ d'entrée de l'email
+                 } else {
+                   $('#emailInput').addClass('d-none'); // Cache le champ d'entrée de l'email
+                 }
+          });
+
+          // Lorsque l'utilisateur coche ou décoche la checkbox de modification de l'image
+          $('#modifyImageCheckbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#imageInput').removeClass('d-none'); // Affiche le champ d'entrée de l'image
+                } else {
+                    $('#imageInput').addClass('d-none'); // Cache le champ d'entrée de l'image
+                }
+          });
+
+          $(document).ready(function() {
+            // Lorsque l'utilisateur clique sur le bouton "Modifier le profil"
+            $('#modifyProfileButton').click(function(event) {
+                event.preventDefault(); // Empêche le comportement par défaut du bouton
+
+               // Récupération du CSRF token en utilisant la fonction getCookie
+               var csrfToken = getCookie('csrftoken');
+
+                // Création d'un objet FormData pour les données du formulaire
+               var formData = new FormData();
+               var name = $('#nameInput').val().trim();
+               var email = $('#emailInput').val().trim();
+               var image = $('#imageInput')[0].files[0]; // Récupère le fichier d'image
+
+               // Vérification que les champs requis ne sont pas vides
+               if ($('#modifyNameCheckbox').is(':checked') && name === '') {
+                    $('#modifyProfileError').text('Veuillez entrer un nouveau nom.');
+                    $('#modifyProfileError').removeClass('d-none').addClass('d-block');
+                    return; // Arrête l'exécution si le champ est vide
+                }
+
+               if ($('#modifyEmailCheckbox').is(':checked') && email === '') {
+                   $('#modifyProfileError').text('Veuillez entrer un nouvel email.');
+                   $('#modifyProfileError').removeClass('d-none').addClass('d-block');
+                   return; // Arrête l'exécution si le champ est vide
+                }
+
+               if ($('#modifyImageCheckbox').is(':checked') && !image) {
+                   $('#modifyProfileError').text('Veuillez entrer une image.');
+                   $('#modifyProfileError').removeClass('d-none').addClass('d-block');
+                   return; // Arrête l'exécution si le champ est vide
+               }
+
+               // Ajout des données au FormData si les champs sont valides
+               if ($('#modifyNameCheckbox').is(':checked')) {
+                    formData.append('new_name', name);
+               }
+
+               if ($('#modifyEmailCheckbox').is(':checked')) {
+                 formData.append('new_email', email);
+               }
+
+               if ($('#modifyImageCheckbox').is(':checked')) {
+                 formData.append('new_image', image);
+               }
+
+                // Ajout du csrf_token à FormData
+                 formData.append('csrfmiddlewaretoken', csrfToken);
+
+               // Envoi des données au backend via AJAX
+              $.ajax({
+                url: '/modify-profile/',
+                type: 'POST',
+                data: formData,
+                processData: false,  // Empêche jQuery de transformer la FormData
+                contentType: false,  // Empêche jQuery de définir le type de contenu
+                success: function(response) {
+                    // Affiche le message de succès avec le contenu de la réponse
+                    $('#successMessage').text(response.message).fadeIn().delay(10000).fadeOut(); // Affiche pendant 10 secondes
+
+                    // Recharge la page après 10 secondes
+                    setTimeout(function() {
+                       location.reload();
+                    }, 10000);
+                },
+                error: function(xhr, status, error) {
+                    // Gérer les erreurs lors de la requête AJAX
+                   console.error('Erreur lors de la modification du profil :', error);
+                   // Afficher un message d'erreur ou effectuer des actions pour gérer l'erreur
+                 }
+              });
+            });
+          });
+        });
+
+
+    
+       });
+
+  
+
+    </script>
+        
+</body>
+
+</html>

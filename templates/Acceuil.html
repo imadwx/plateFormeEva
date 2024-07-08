@@ -1,0 +1,353 @@
+<!-- /*
+* Template Name: Learner
+* Template Author: Untree.co
+* Tempalte URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Display+Playfair:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+ 
+
+
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/animate.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/jquery.fancybox.min.css'%}">
+  <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css'%}">
+  <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css'%}">
+  <link rel="stylesheet" href="{% static 'css/aos.css'%}">
+  <link rel="stylesheet" href="{% static 'css/style.css'%}">
+
+  <title>PédagoEval : Création d'Évaluations Pédagogiques</title>
+</head>
+
+<body>
+
+  <style>
+     
+
+     .custom-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+     }
+
+
+
+  </style>
+
+  <div class="modal fade" id="modalEddarouich" tabindex="-1" aria-labelledby="modalEddarouichLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                 <div style="display: flex;justify-content: center;align-items: center;">
+                    <div style="border-radius: 50%; overflow: hidden; width: 100px; height: 100px;">
+                      <img src="{% static 'images/Eddarouich.jpg'%}" alt="Image" class="img-fluid">
+                    </div>
+                    <h5 style="margin-left:20px;"> Mme Eddarouich souad</h5>
+                 </div>
+            </div>
+            <div class="modal-body">
+              <p>Professeur Eddarouich Souad Formatrice au <a href="https://crmefrabat-alirfane.org/"  style="text-decoration: underline;">CRMEF de Rabat</a> de spécialité informatique et intelligence artificielle auteur de plusieurs articles scientifiques sur l’IA et ses applications dans plusieurs domaines entre autres la médecine, l’éducation. Enseignants d’informatique et de didactique d’informatique au profit des enseignants stagiaires du cycle secondaire qualifiant depuis 2012. Elle a encadré des thèses de doctorants en Intelligence artificielle la dernière thèse soutenue le 06 -07-2024 à l’<a href="https://ensa.uit.ac.ma/"  style="text-decoration: underline;">ENSA de Kenitra</a> Université Ibn Tofail.</p>
+              <!-- Ajoutez ici les détails supplémentaires -->
+            </div>
+          
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="site-mobile-menu">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
+
+  
+  <nav class="site-nav mb-5">
+    
+    <div class="sticky-nav">
+      <div class="container position-relative">
+        <div class="site-navigation text-center">
+          <a href="" class="logo menu-absolute m-0">LearnEva<span class="text-primary">.</span></a>
+
+          
+
+          <a href="" class="btn-book btn btn-secondary btn-sm menu-absolute" data-toggle="modal" data-target="#loginModal">Login</a>
+
+          <a href="" class="burger ml-auto float-right site-menu-toggle js-menu-toggle d-inline-block d-lg-none light" data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  {% include 'login_modal.html' %}
+
+  <div class="untree_co-hero overlay" style="background-image: url('images/hero-img-1-min.jpg');">
+
+
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+
+        <div class="col-12">
+
+          <div class="row justify-content-center ">
+
+            <div class="col-lg-6 text-center ">
+
+              <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Personnalisez vos Évaluations Éducatives pour un Apprentissage Optimal</h1>
+              <p class="mb-0" data-aos="fade-up" data-aos-delay="300" ><a href="" class="btn btn-secondary" data-toggle="modal" data-target="#loginModal">Découvrir</a></p>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+  </div> <!-- /.untree_co-hero -->
+
+  <div class="untree_co-section">
+    <div class="container">
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-7 text-center" data-aos="fade-up" data-aos-delay="0">
+                <h2 class="line-bottom text-center mb-4">Explorez les catégories principales</h2>
+            </div>
+        </div>
+        <div class="row align-items-stretch">
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="0">
+                <a href="#" class="category d-flex align-items-start h-100">
+                    <div>
+                      <i class="uil uil-search"></i>
+
+                    </div>
+                    <div>
+                        <h3>Chercher des évaluations diversifiées</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <a href="" class="category d-flex align-items-start h-100">
+                    <div>
+                      <i class="uil uil-pen"></i>
+                    </div>
+                    <div>
+                        <h3>Créer vos propres évaluations</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <a href="" class="category d-flex align-items-start h-100">
+                    <div>
+                        <i class="uil uil-upload"></i>
+                    </div>
+                    <div>
+                        <h3>Télécharger des évaluations vers Learn Eva</h3>
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <a href="" class="category d-flex align-items-start h-100">
+                    <div>
+                      <i class="uil uil-direction"></i>
+                    </div>
+                    <div>
+                        <h3>Guides pour créer des évaluations pédagogiques</h3>
+                    </div>
+                </a>
+            </div>
+
+        
+        </div>
+
+    </div>
+</div>
+
+
+<div class="services-section">
+  <div class="container">
+      <div class="row justify-content-between">
+          <div class="col-lg-4 mb-5 mb-lg-0">
+
+              <div class="section-title mb-3" data-aos="fade-up" data-aos-delay="0">
+                  <h3 class="line-bottom mb-4">Professseur Eddarouich souad </h3>
+              </div>
+
+              <p data-aos="fade-up" data-aos-delay="100">Souad travaille actuellement au Centre Régional des Métiers de l'Education et de la Formation de la Région de Rabat (CRMEF). Elle mène des recherches en Data Mining, Intelligence Artificielle et Réseaux de Neurones Artificiels. Son projet actuel est la reconnaissance de l'iris.</p>
+
+              <ul class="ul-check list-unstyled mb-5 primary" data-aos="fade-up" data-aos-delay="200">
+                  <li>Expertise dans la création d'évaluations pédagogiques.</li>
+                  <li>Connaissances approfondies en Intelligence Artificielle.</li>
+                  <li>Projet en cours : 'La reconnaissance de l'Iris'.</li>
+                  <li>Guidage pour créer des évaluations sur notre plateforme.</li>
+              </ul>
+
+              <p data-aos="fade-up" data-aos-delay="300">
+                <a href="" class="btn btn-primary" data-toggle="modal" data-target="#modalEddarouich">Voir plus</a>
+              </p>
+
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+            <figure class="img-wrap-2" style="margin-top: 25px;">
+                <img src="{% static 'images/Eddarouich.jpg'%}" alt="Image" class="img-fluid rounded-circle custom-img">
+                <div class="dotted"></div>
+            </figure>
+          </div>
+        
+        
+          </div>
+       </div>
+    </div>
+
+    
+    <div id="success-message" class="alert alert-success" style="display: none; position: absolute; top: 5%; left: 5%; background-color: green; z-index: 2000; color: white; border: none;"></div>
+
+
+
+    <div id="overlayer"></div>
+    <div class="loader">
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <script src="{% static 'js/jquery-3.4.1.min.js'%}"></script>
+    <script src="{% static 'js/popper.min.js'%}"></script>
+    <script src="{% static 'js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'js/owl.carousel.min.js'%}"></script>
+    <script src="{% static 'js/jquery.animateNumber.min.js'%}"></script>
+    <script src="{% static 'js/jquery.waypoints.min.js'%}"></script>
+    <script src="{% static 'js/jquery.fancybox.min.js'%}"></script>
+    <script src="{% static 'js/jquery.sticky.js'%}"></script>
+    <script src="{% static 'js/aos.js'%}"></script>
+    <script src="{% static 'js/custom.js'%}"></script>
+
+    <script>
+    
+    
+      document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.querySelector('#loginModal form');
+        const errorMessage = document.querySelector('#error-message'); // Assurez-vous que ce div existe dans votre HTML
+        const successMessage = document.querySelector('#success-message'); 
+        loginForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const email = document.querySelector('#email').value;
+          const password = document.querySelector('#password').value;
+          const csrfToken = getCookie('csrftoken'); // Utilisation de la fonction getCookie
+
+
+          // Réinitialiser les messages d'erreur
+          errorMessage.style.display = 'none';
+          errorMessage.innerHTML = '';
+          successMessage.style.display = 'none';
+          successMessage.innerHTML = '';
+
+          // Validation des champs
+          if (!email || !password) {
+               errorMessage.style.display = 'block';
+               errorMessage.innerHTML = 'Veuillez remplir tous les champs.';
+               return;
+          }
+
+          if (!validateEmail(email)) {
+              errorMessage.style.display = 'block';
+              errorMessage.innerHTML = 'Veuillez entrer un email valide.';
+              return;
+          }
+    
+          const formData = new FormData();
+          formData.append('email', email);
+          formData.append('password', password);
+    
+          fetch('/login/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': csrfToken
+            },
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              successMessage.style.display = 'block';
+              successMessage.innerHTML = 'Connexion avec succès! Redirection...';
+
+              // Attendre 3 secondes avant la redirection
+              setTimeout(() => {
+                   window.location.href = "{% url 'guidage_page' %}";
+              }, 3000);
+
+            } else {
+                 errorMessage.style.display = 'block';
+                 errorMessage.innerHTML = 'Login failed: ' + data.message;
+            }
+          })
+          .catch(error => console.error('Error:', error));
+        });
+      });
+
+
+        // Fonction pour récupérer le token CSRF
+        function getCookie(name) {
+             let cookieValue = null;
+             if (document.cookie && document.cookie !== '') {
+                  const cookies = document.cookie.split(';');
+                  for (let i = 0; i < cookies.length; i++) {
+                      const cookie = cookies[i].trim();
+                      // Vérifier si ce cookie commence par le nom recherché
+                      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                  }
+            }
+            return cookieValue;
+
+        }
+
+        // Fonction pour valider le format de l'email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+
+      
+      </script>
+    
+
+  </body>
+
+  </html>

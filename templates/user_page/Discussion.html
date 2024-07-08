@@ -1,0 +1,425 @@
+
+
+
+
+
+<!DOCTYPE html>
+
+{% load static %}
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+    data-assets-path="{% static 'assets/' %}" data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>LearnC | Dashboard</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/logo/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+    
+
+    <link rel="stylesheet" href="{% static 'assets/css/chat.css' %}" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets/js/config.js' %}"></script>
+</head>
+
+<body>
+
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="layout-menu-toggle navbar-nav me-xl-0 d-xl-none bg-white sticky-top">
+        <div class="row align-items-center">
+            <div class="col-6 ps-3 pt-2">
+                <a href="" class="nav-item nav-link app-brand-link my-2 ms-2">
+                    <img src="{% static 'assets/img/logo/LearnC.png' %}"
+                        style="max-width: 50%; max-height: 50%; object-fit: contain;">
+                </a>
+            </div>
+            <div class="col-6 text-end">
+                <a class="nav-item nav-link px-0" href="javascript:void(0)">
+                    <i class="bx bx-menu bx-sm" height="50px" width="50px"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar layout-without-navbar">
+
+        <!-- Layout container -->
+        <div class="layout-container">
+
+            <!-- Menu -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="" class="app-brand-link">
+                        <img src="{% static 'assets/img/logo/LearnC.png' %}" alt="" class="p-5"
+                            style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1 mt-3">
+                    <!-- Dashboard -->
+                    <li class="menu-item">
+                        <a href="" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+
+
+                    <!-- Components -->
+                    <li class="menu-header small text-uppercase"><span class="menu-header-text">Sections</span></li>
+                    <!-- Sections -->
+
+                    <li class="menu-item">
+                        <a href="{% url 'guidage_page' %}" class="menu-link">
+                            <div data-i18n="Basic">Guidage</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{% url 'evaluation_page' %}" class="menu-link">
+                            <div data-i18n="Analytics">Evaluation</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item active">
+                        <a href="{% url 'evaluation_discussion' %}" class="menu-link">
+                            <div data-i18n="Analytics">Discussion</div>
+                        </a>
+                    </li>
+                 
+                    
+                    <!-- User interface -->
+
+                </ul>
+                <div class="menu-divider mb-0"></div>
+                <ul class="m-0 p-0">
+                    <li class="menu-block my-1 d-flex flex-row justify-content-end">
+                        {% if user.is_authenticated %}
+                        <div class="row w-100 me-1">
+                            <div class="col-10">
+                                <p><strong>{{ user.username }}</strong> is connected</p>
+                            </div>
+                            <div class="col-2">
+                                <a class="fold-show" title="Logout" data-bs-placement="top" data-bs-toggle="tooltip"
+                                    href=""><span aria-hidden="true"
+                                        class="text-body bx bx-log-out"></span>
+                                </a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <a class="fold-show me-3" title="Signup" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-user-plus"></span>
+                        </a>
+                        <a class="fold-show" title="Login" data-bs-placement="top" data-bs-toggle="tooltip"
+                            href=""><span aria-hidden="true" class="text-body bx bx-log-in"></span>
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </aside>
+            <!--/ Menu -->
+
+            <!-- Layout page -->
+            <div class="layout-page">
+
+                <div class="container">
+                    <div class="row clearfix">
+                        <div class="col-lg-12">
+                            <div class="card chat-app">
+                                <!-- Liste des utilisateurs récents -->
+                                <div id="plist" class="people-list">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                        </div>
+                                        <input id="userSearchInput"  type="text" class="form-control" placeholder="Search...">
+                                        <div id="userDropdown" class="dropdown-menu position-absolute" style="width:80%;margin-left:20%;top: 100%; z-index: 1000;">
+                                            <!-- Les résultats de recherche vont être affichés ici -->
+                                        </div>
+                                    </div>
+                                    <ul id="userList" class="list-unstyled chat-list mt-2 mb-0">
+                                        <!-- Les utilisateurs récents connectés vont être affichés ici dynamiquement -->
+                                    </ul>
+                                </div>
+                                
+                                <!-- Partie de conversation -->
+                                <div class="chat">
+                                    <div class="chat-header clearfix">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+                                                    <img id="chatUserImage" src="" alt="avatar">
+                                                </a>
+                                                <div class="chat-about">
+                                                    <h6 id="chatUserName" class="m-b-0"></h6>
+                                                    <small id="chatUserStatus">Last seen: 2 hours ago</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 hidden-sm text-right">
+                                                <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="chat-history" data-id="{{request.user.id}}" data-name="{{request.user.username}}">
+                                        <ul id="messageList" class="m-b-0">
+                                            <!-- Les messages seront ajoutés dynamiquement ici -->
+                                        </ul>
+                                    </div>
+                                    <div class="chat-message clearfix">
+                                        <div class="input-group mb-0">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-send"></i></span>
+                                            </div>
+                                            <input id="messageInput" type="text" class="form-control" placeholder="Enter text here...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                 
+
+            </div>
+            <!--/ Layout page -->
+
+            
+            
+
+        </div>
+        <!--/ Layout container -->
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+    </div>
+    <!--/ Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{% static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+
+    <!-- Main JS -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+
+    <!-- Page JS -->
+    <script src="{% static 'assets/js/dashboards-analytics.js' %}"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <script>
+         
+         document.addEventListener('click', function(event) {
+               const userSearchInput = document.getElementById('userSearchInput');
+               const userDropdown = document.getElementById('userDropdown');
+
+               // Vérifier si l'élément cliqué n'est pas dans la zone de recherche ou le dropdown
+               if (event.target !== userSearchInput && !userDropdown.contains(event.target)) {
+                   userDropdown.classList.remove('show');
+
+                   userSearchInput.value = '';
+               }
+         });
+
+         document.getElementById('userSearchInput').addEventListener('input', function() {
+         const query = this.value;
+         const userDropdown = document.getElementById('userDropdown');
+
+         fetch(`/search-users/?q=${query}`)
+         .then(response => response.json())
+         .then(data => {
+             userDropdown.innerHTML = '';
+                data.users.forEach(user => {
+                    // Création de la div contenant l'image et le nom d'utilisateur
+                    const userInfoDiv = document.createElement('div');
+                    userInfoDiv.classList.add('user-info');
+                    
+                    // Création de l'image de profil avec bord arrondi
+                    const profileImage = document.createElement('img');
+                    profileImage.src = user.profile_image; // Assurez-vous que user.profile_image contient l'URL de l'image
+                    profileImage.alt = 'Profile Image';
+                    profileImage.classList.add('profile-image');
+
+                    // Ajout de l'image de profil à la div userInfoDiv
+                    userInfoDiv.appendChild(profileImage);
+
+                    // Ajout du nom d'utilisateur à la div userInfoDiv
+                    const usernameDiv = document.createElement('div');
+                    usernameDiv.textContent = user.username;
+                    userInfoDiv.appendChild(usernameDiv);
+
+                    userInfoDiv.addEventListener('click', function() {
+                        addUserToRecent(user);
+                    });
+
+                    // Ajout de userElement à userDropdown
+                    userDropdown.appendChild(userInfoDiv);
+                });
+                userDropdown.classList.add('show');
+    
+            });
+});
+
+
+
+function addUserToRecent(user) {
+    // Vérifiez si l'utilisateur est déjà dans la liste
+    const existingUser = document.querySelector(`#userList li[data-user-id="${user.id}"]`);
+    if (!existingUser) {
+        // Ajouter l'utilisateur à la liste des récents
+        const userList = document.getElementById('userList');
+        const userItem = document.createElement('li');
+        userItem.classList.add('clearfix');
+        userItem.setAttribute('data-user-id', user.id);
+        userItem.innerHTML = `
+            <img src="${user.profile_image}" alt="avatar">
+            <div class="about">
+                <div class="name">${user.username}</div>
+                <div class="status"><i class="fa fa-circle online"></i> online</div>
+            </div>
+        `;
+        userItem.addEventListener('click', function() {
+            loadChat(user);
+        });
+        
+        // Fermer le menu déroulant
+        document.getElementById('userDropdown').classList.remove('show');
+
+        // Réinitialiser la valeur du champ de recherche à vide
+        document.getElementById('userSearchInput').value = '';
+
+        // Insérer l'élément li au début de la liste
+        userList.insertBefore(userItem, userList.firstChild);
+    }
+}
+
+function loadChat(user) {
+
+    var chatHistory = document.querySelector('.chat-history');
+    chatHistory.innerHTML = '';
+    var senderId = chatHistory.getAttribute('data-id');
+    // WebSocket pour charger la conversation
+    var socket = new WebSocket('ws://' + window.location.host + '/ws/discussion/' + user.id + '/');  // Adapter l'URL WebSocket selon votre configuration
+    socket.onopen = function() {
+        console.log('WebSocket connection established.');
+
+        // Envoyer une commande pour charger l'historique du chat entre l'utilisateur connecté et 'user'
+        socket.send(JSON.stringify({
+            'command': 'load_chat_history',
+            'sender_id': senderId,  // ID de l'utilisateur connecté
+            'recipient_id': user.id  // ID de l'utilisateur passé en paramètre
+        }));
+    };
+
+    socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        displayMessage(data.sender,data.sender_image, data.message, data.timestamp);
+    };
+
+    socket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    function displayMessage(sender,image, message, timestamp) {
+        var messageList = document.createElement('div');
+         messageList.setAttribute('id', 'messageList');
+
+        var messageItem = document.createElement('li');
+        messageItem.classList.add('clearfix');
+
+        var chatHistory = document.querySelector('.chat-history');
+        var myUsername = chatHistory.getAttribute('data-name');
+        
+        var messageClass = (sender === myUsername) ? 'my-message float-right' : 'other-message float-left';
+        
+        messageItem.innerHTML = `
+            <div class="message-data ${messageClass}">
+                <span class="message-data-time">${timestamp}</span>
+                <img src="${image}" alt="avatar">
+            </div>
+            <div class="message ${messageClass}">${message}</div>
+        `;
+        messageList.appendChild(messageItem);
+        chatHistory.appendChild(messageList);
+
+        // Ajouter un message de bienvenue s'il n'y a aucun message chargé
+      if (chatHistory.querySelector('ul').childElementCount === 0) {
+        var welcomeMessage = document.createElement('li');
+        welcomeMessage.textContent = 'Bienvenue dans le chat !';
+        welcomeMessage.style.textAlign = 'center';
+        chatHistory.querySelector('ul').appendChild(welcomeMessage);
+    }
+}
+    }
+
+
+      
+
+
+          document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                  if (e.key === 'Enter') {
+                  const message = this.value;
+                  if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+                    chatSocket.send(JSON.stringify({
+                      'message': message
+                    }));
+                 this.value = '';
+          }
+    }
+});
+    </script>
+</body>
+
+</html>
